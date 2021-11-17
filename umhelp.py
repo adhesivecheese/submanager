@@ -346,7 +346,7 @@ if __name__ == "__main__":
             remove_on_phrase(subreddit)
 
 
-        # Loop every X seconds (20 minutes)
+        # Loop every X seconds (10 minutes)
         sleep_until = (dt.now() + td(0, sleep_seconds)).strftime('%H:%M:%S')
         print("\nThat\'s it for now.")
         print(f'I\'ll be back around {sleep_until}.') #%Y-%m-%d
