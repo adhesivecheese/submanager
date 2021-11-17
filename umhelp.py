@@ -1,6 +1,7 @@
 
 
-# Unmoderated Queue Helper Bot v.11 by u/BuckRowdy.  This is a script I cobbled together from other bots.
+
+# Unmoderated Queue Helper Bot v.11 by u/BuckRowdy.  
 # The bot manages the unmoderated queue and also checks for highly reported items.
 # The point of the bot is to automate approving posts that fit a certain profile and removing posts that fit the profile of spam.
 
@@ -14,24 +15,25 @@ from time import localtime, timezone
 from datetime import datetime as dt, timedelta as td, date
 import logging
 
-#Create and configure logger 
-logging.basicConfig(filename="/home/pi/bots/unmod/std.log", 
-                    format='%(asctime)s %(message)s', 
-                    filemode='w') 
+#Create and configure logger
+logging.basicConfig(filename="/home/pi/bots/unmod/std.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
 
-#Create an object 
-logger=logging.getLogger() 
+#Create an object
+logger=logging.getLogger()
 
-#Set the threshold of logger to INFO 
+#Set the threshold of logger to INFO
 logger.setLevel(logging.INFO)
 
 # Define the subreddit that you are working on.
 sub_name = 'mod'
+queue_posts = None
 
 
 
-sleep_seconds = 3600     # Number of seconds to sleep between scans (3600 = 1 hour)
-#sleep_seconds = 600     # Five minute timer if needed instead.
+sleep_seconds = 1800     # Number of seconds to sleep between scans (3600 = 1 hour)
+
 
 
 #Defines the reddit login function
@@ -65,7 +67,7 @@ def printCurrentTime():
 
 
 
-
+#  Check items in the reports queue. 
 def check_modqueue(subreddit):
 
     print('Checking the reports queue for highly reported items...')
@@ -74,12 +76,12 @@ def check_modqueue(subreddit):
     for item in reported_items:
 
         if item.num_reports >= 2 and item.score <= -12:
-            item.mod.remove()
+            item.mod.remove(mod_note="reports/downvotes")
             item.mod.lock()
             logging.info(f'Downvote/Reports user: /u/{item.author} -- {item.subreddit} - {item.permalink}')
 
         elif item.num_reports >= 5:
-            item.mod.remove()
+            item.mod.remove(mod_note="Highly reported")
             item.mod.lock()
             item.subreddit.message("I removed something for being highly reported.", f"FYI I removed this item because it got reported 5 times: [{item}](https://reddit.com{item.permalink}) *This was performed by an automated script, please check to ensure this action was correct.*")
             print(f'r/{submission.subreddit}')
@@ -88,9 +90,9 @@ def check_modqueue(subreddit):
             print(f'> Author: {submission.author}\n Title: {submission.title}\n Score: {submission.ups}\n')
             print('        ')
             print(f'Reports: {submission.mod_reports} mod reports, {submission.user_reports} user reports')
-            logging.info(f'Highly Reported: user: /u/{item.author} -- {item.subreddit} - {item.permalink}')
+            logging.info(f'Highly Reported user: /u/{item.author} -- {item.subreddit} - {item.permalink}')
         else:
-            continue   
+            continue
 
 
 
@@ -115,7 +117,7 @@ def get_latest_submissions(subreddit):
 #  - Approve week old posts that remain at one upvote but don't get reported.
 
 
-def check_submissions(submissions, queue_posts):
+def check_submissions(submissions):
 
     for submission in submissions:
 
@@ -126,6 +128,7 @@ def check_submissions(submissions, queue_posts):
         twelvehours = (now - 43200.0)
         eighteen = (now - 64800.0)
         week = (now - 604800.0)
+
 
         # Frequent submitters that are mods who never approve their own posts.
         if submission.author == "HysteryMystery":
@@ -186,7 +189,7 @@ def check_submissions(submissions, queue_posts):
 
 
         # Check if post is older than 18 hours, has at least one upvote, no reports, and approve.
-        elif submission.created_utc < eighteen and submission.score > 1 and submission.num_reports == 0 and not submission.spam and not submission.approved and not submission.removed:
+        elif submission.created_utc < eighteen and submission.score >= 1 and submission.num_reports == 0 and not submission.spam and not submission.approved and not submission.removed:
             #printCurrentTime()
             submission.mod.approve()
             print(f'[18 hrs Approved Post  - r/{submission.subreddit} |{submission.score}⬆| - u/{submission.author}]')
@@ -209,8 +212,8 @@ def check_submissions(submissions, queue_posts):
             submission.mod.approve()
 
         else:
-            queue_posts.append(submission.id)
-
+            #queue_posts.append(submission.id)
+            continue
 
     return queue_posts
 
@@ -248,7 +251,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # A list of posts, keep this in memory so we don't keep checking these
-    queue_posts = []
+    #queue_posts = []
 
     # Loop the bot
     while True:
@@ -267,12 +270,12 @@ if __name__ == "__main__":
 
 
             # Once you have submissions, check valid posts
-            queue_posts = check_submissions(submissions, queue_posts)
+            check_submissions(submissions)
             howManyItems(subreddit)
 
 
         # Loop every X seconds (20 minutes)
-        sleep_until = (dt.now() + td(0, sleep_seconds)).strftime('%H:%M:%S')  
+        sleep_until = (dt.now() + td(0, sleep_seconds)).strftime('%H:%M:%S')
         print("\nThat\'s it for now.")
         print(f'I\'ll be back around {sleep_until}.') #%Y-%m-%d
         print('    ')
