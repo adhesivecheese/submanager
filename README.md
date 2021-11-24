@@ -25,14 +25,14 @@ Any post can be made exempt from the following set of conditions by approving it
 
 - **Report Conditions**
 
- Posts that will be reported:
+   Posts that will be reported:
 
  - Posts that reach 400 karma within two hours.
  - Posts that are downvoted to 20% within one hour but not reported.
 
 - **Remove Conditions**
 
- Posts that will be removed:
+   Posts that will be removed:
 
  - Posts that are downvoted to .08% or lower.  A generic removal comment will be stickied with a link to modmail for an appeal.  
 
@@ -44,7 +44,7 @@ Any post can be made exempt from the following set of conditions by approving it
      
 - **Approve Conditions**
 
- Posts that will be approved:
+   Posts that will be approved:
  
  - Posts made by a moderator of the subreddit but not approved by them. Shame on you.
 
