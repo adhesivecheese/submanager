@@ -1,4 +1,4 @@
-# Sub-Manager
+# SubManager
 Manage your reddit unmoderated queue and reports queue.  
 
 The bot that runs on u/ghostofbearbryant is a subreddit manager bot that monitors the reports and unmoderated queues every ten minutes.  It has a third function that scans the mod log and creates a new post for each removed post and comment.  It approves posts that a human moderator would normally approve if they were reviewing unmoderated posts.
