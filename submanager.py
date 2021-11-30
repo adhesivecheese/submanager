@@ -395,7 +395,7 @@ if __name__ == "__main__":
             howManyItems(subreddit)
 
 
-        # Loop every X seconds (10 minutes, currently.)
+        # Loop every X seconds (5 minutes, currently.)
         sleep_until = (dt.now() + td(0, sleep_seconds)).strftime('%H:%M:%S')
         print(f'Be back around {sleep_until}.') 
         print('    ')
