@@ -183,13 +183,13 @@ def checkSubmissions(submissions):
             elif submission.created_utc < eighteen and submission.score >= 1 and submission.num_reports == 0 and not submission.spam and not submission.approved and not submission.removed:
                 #printCurrentTime()
                 submission.mod.approve()
-                print(f'Approved Post 18hrs - r/{submission.subreddit} |{submission.score} ^| - u/{submission.author}]')
+                print(f'Approved Post 18hrs - r/{submission.subreddit} |{submission.score} ^| - u/{submission.author}')
                 continue    
 
             #  Approve week old posts that don't get upvoted, but don't get downvoted either.
             elif submission.created_utc < week and submission.score == 1 and submission.num_reports == 0 and not submission.spam and not submission.removed:
                 submission.mod.approve()
-                print(f'Approved Post 7days - r/{submission.subreddit} |{submission.score} ^| - u/{submission.author}]')
+                print(f'Approved Post 7days - r/{submission.subreddit} |{submission.score} ^| - u/{submission.author}')
 
             else:
                 continue
@@ -230,7 +230,7 @@ def checkModqueue(subreddit):
             elif item.num_reports >= 5:
                 item.mod.remove()
                 item.mod.lock()
-                item.subreddit.message("I removed something for being highly reported.", f"FYI I removed this item because it got reported 5 times: [{item}](https://reddit.com{item.permalink}) *This was performed by an automated script, please check to ensure this action was correct.*\n---\n*[^(Review my post removals)](https://reddit.com/r/mod/about/log/?type=removelink&mod=ghostofbearbryant)*")
+                item.subreddit.message("I removed an item for being highly reported.", f"FYI I removed this item because it got reported 5 times: [{item}](https://reddit.com{item.permalink}) *This was performed by an automated script, please check to ensure this action was correct.*\n\n---\n\n*[^(Review my post removals)](https://reddit.com/r/mod/about/log/?type=removelink&mod=ghostofbearbryant)* -- *[[^Subreddit](http://reddit.com/r/ghostofbearbryant)*")
                 print(f'r/{item.subreddit}')
                 print(f"I removed this highly reported item. https://reddit.com{item.permalink}")
                 print('        ')
@@ -306,7 +306,7 @@ def checkModLog(subreddit):
 
             elif keyphrase in log.details:
                 sub_name = "ghostofbearbryant"
-                title = f"Tard Filter with details: {log.details} in r/{log.subreddit}. "
+                title = f"Ret*rd Filter in r/{log.subreddit} for /u/{log.target_author}."
                 selftext = f"Action: {log.action}\n\nTitle: {log.target_title}\n\nBody: {log.target_body}\n\nDetails: {log.details}\n\nLink: http://reddit.com{log.target_permalink}"
                 r.subreddit(sub_name).submit(title, selftext)
                 print(f"Action: >{log.action}< was posted in the log sub.")    
